@@ -6,7 +6,8 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>3.3.2</version>
+<!--        <version>3.3.2</version>-->
+        <version>2.7.3</version>
     </parent>
 
     <groupId>com.sky</groupId>
@@ -23,8 +24,9 @@
 
     <!--声明依赖版本-->
     <properties>
+      <!--  <mybatis.spring>3.0.3</mybatis.spring>-->
         <mybatis.spring>2.2.0</mybatis.spring>
-        <lombok>1.18.20</lombok>
+        <lombok>1.18.34</lombok>
         <fastjson>1.2.76</fastjson>
         <commons.lang>2.6</commons.lang>
         <druid>1.2.1</druid>
@@ -80,6 +82,7 @@
             </dependency>
 
 
+            <!--1.导入swagger生成Api文档的封装依赖, 2.还需在配置类@collection加入相关配置 3.设置静态资源映射-->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
@@ -137,4 +140,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
 </project>
