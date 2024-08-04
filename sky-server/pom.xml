@@ -124,14 +124,11 @@
             <version>4.0.1</version>
         </dependency>
 
-
         <!-- Knife4j 依赖 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
         </dependency>
-
-
 
 
     </dependencies>
@@ -143,6 +140,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+         <!--   <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>22</source>
+                    <target>22</target>
+                    <compilerArgs>&#45;&#45;enable-preview</compilerArgs>
+                </configuration>
+            </plugin>-->
         </plugins>
     </build>
 
