@@ -43,4 +43,11 @@ public interface EmployeeMapper {
     * 修改员工(根据主键employee动态sql修改属性)
     * */
     void update(Employee employee);
+
+
+    /*
+     * 查询员工信息(根据id)
+     * */
+    @Select("select * from sky_take_out.employee where id = #{id}")
+    Employee getById(Integer id);
 }

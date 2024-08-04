@@ -50,7 +50,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
             //把JWT解析的账号id存入到该线程存储里,这样在service,mapper 或该同一线程的其他任务中也能获取到
             BaseContext.setCurrentId(empId);
-            log.info("当前员工id：", empId);
+            log.info("JWT解析 当前员工id：", empId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {
