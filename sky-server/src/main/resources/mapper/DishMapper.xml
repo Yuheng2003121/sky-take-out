@@ -30,6 +30,15 @@
            </if>
        </where>
         order by d.create_Time desc
-
     </select>
+
+    <!--删除菜品(根据id集合)-->
+    <delete id="deleteByIds">
+        delete from sky_take_out.dish where id in 
+        <foreach collection="ids" item="pageId" open="("  separator="," close=")">
+            #{pageId}
+        </foreach>
+    </delete>
+
+
 </mapper>
