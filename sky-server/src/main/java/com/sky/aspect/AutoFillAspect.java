@@ -47,7 +47,7 @@ public class AutoFillAspect {
         OperationType operationType = autoFill.value();//获得数据库操作类型, 也就是注解上的value
 
 
-        //2. 获取当前被拦截的方法上的实体参数对象
+        //2. 获取当前被拦截的切面的方法上的实体参数对象
         Object[] args = joinPoint.getArgs();
 
         if(args == null || args.length == 0){//以防止传入mapper方法参数上没有值
@@ -60,14 +60,14 @@ public class AutoFillAspect {
         LocalDateTime now = LocalDateTime.now();
         Long currentId = BaseContext.getCurrentId();
 
-        //4. 根据不同标注的value进行不同的赋值操作 通过反射
+        //4. 根据不同标注的value进行不同的赋值操作: 通过反射获取实体对象的方法 -> 再进行方法调用赋值
         if(operationType == OperationType.INSERT){
             //为4个公共字段都赋值
 
             //获得实体对象的set和get方法
             try {
                 Method setCreateTime = entity.getClass().getDeclaredMethod("setCreateTime", LocalDateTime.class);
-                Method setUpdateTime = entity.getClass().getDeclaredMethod("setUpdateTime", LocalDate.class);
+                Method setUpdateTime = entity.getClass().getDeclaredMethod("setUpdateTime", LocalDateTime.class);
                 Method setCreateUser = entity.getClass().getDeclaredMethod("setCreateUser", Long.class);
                 Method setUpdateUser = entity.getClass().getDeclaredMethod("setUpdateUser", Long.class);
 

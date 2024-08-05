@@ -44,6 +44,7 @@ public interface CategoryMapper {
     @AutoFill(value = OperationType.UPDATE)//AOP切面方法使用自定义注解标注
     void update(Category category);
 
+
     /**
      * 根据类型查询分类
      * @param type

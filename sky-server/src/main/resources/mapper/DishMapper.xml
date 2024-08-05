@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.DishMapper">
+
+
+    <!--新增菜品-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"> /*useGeneratedKeys="true" 表示自动获取该数据到数据库的主键值 keyProperty="id" 表示把返回的主键值赋给dish的id属性*/
+        insert into sky_take_out.dish (name, category_id, price, image, description, create_time, update_time, create_user, update_user, status)
+        values
+        (#{name}, #{categoryId}, #{price},#{image},#{description},#{createTime},#{updateTime},#{createUser},#{updateUser},#{status})
+    </insert>
+</mapper>

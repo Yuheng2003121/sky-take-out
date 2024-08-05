@@ -12,6 +12,11 @@ spring:
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
 
+  servlet:
+    multipart:
+      max-file-size: 10MB      # 配置单个文件上传大小限制
+      max-request-size: 100MB  # 配置单个请求最大大小的限制（一次请求中可以上传多个文件）
+
 
 
 mybatis:
@@ -39,4 +44,15 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+
+  # 阿里云的OSS配置信息 (@Value注解通常用于外部配置的属性注入，具体用法为:@Value("${配置文件中的key)")
+  oss:
+    endpoint: ${sky.oss.endpoint}
+    access-key-id: ${sky.oss.access-key-id}
+    access-key-secret: ${sky.oss.access-key-secret}
+    bucket-name: ${sky.oss.bucket-name}
+
+
+
+
 

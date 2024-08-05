@@ -4,9 +4,12 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
+import com.sky.properties.AliOssProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
 import java.io.ByteArrayInputStream;
 
 @Data
@@ -62,7 +65,7 @@ public class AliOssUtil {
                 .append(objectName);
 
         log.info("文件上传到:{}", stringBuilder.toString());
-
         return stringBuilder.toString();
+
     }
 }
