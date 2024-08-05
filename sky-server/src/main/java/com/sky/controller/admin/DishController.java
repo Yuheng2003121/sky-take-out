@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /*
 * 菜品管理
 * */
@@ -47,6 +49,24 @@ public class DishController {
         PageResult pageResult = dishService.pageQuery(dishPageQueryDTO);
 
         return Result.success(pageResult);
+    }
+
+    /*
+    * 菜品批量删除
+    * Query 参数:
+            ids    必需
+            string
+            菜品id，之间用逗号分隔
+            示例值:1,2,3
+    * */
+    @DeleteMapping
+    @ApiOperation("菜品批量删除")
+    public Result delete(@RequestParam List<Long> ids){//@RequestParam 可以自动解析 1,2,3用逗号分隔的字符串,并解析到list里
+        log.info("菜品批量删除:{}", ids);
+
+        dishService.deleteBatch(ids);
+
+        return Result.success();
     }
 
 }
