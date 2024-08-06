@@ -1,10 +1,14 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.mapper.SetmealMapper;
+import com.sky.result.PageResult;
 import com.sky.service.SetMealService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +46,17 @@ public class SetMealServiceImpl implements SetMealService {
         //保存套餐和菜品的关联关系(在setmeal_dish中间表新增与之对应的套餐和菜品)
         setmealDishMapper.insertBatch(setmealDishes);
 
+    }
+
+    /*
+     * 套餐分页查询
+     * */
+    @Override
+    public PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO) {
+        PageHelper.startPage(setmealPageQueryDTO.getPage(), setmealPageQueryDTO.getPageSize());
+
+        Page<Setmeal> setmealPage = setmealMapper.pageQuery(setmealPageQueryDTO);
+
+        return new PageResult(setmealPage.getTotal(), setmealPage.getResult());
     }
 }
