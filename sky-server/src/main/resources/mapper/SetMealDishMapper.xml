@@ -11,4 +11,13 @@
              #{dishId}
          </foreach>
     </select>
+
+    <!--新增菜品和套餐的关系在中间表(根据集合)-->
+    <insert id="insertBatch">
+        insert into sky_take_out.setmeal_dish (setmeal_id, dish_id, name, price, copies)
+        values
+        <foreach collection="setmealDishes" item="setMealDish" separator=",">
+            (#{setMealDish.setmealId}, #{setMealDish.dishId}, #{setMealDish.name}, #{setMealDish.price}, #{setMealDish.copies})
+        </foreach>
+    </insert>
 </mapper>

@@ -13,6 +13,7 @@ import java.util.List;
 @Mapper
 public interface DishMapper {
 
+
     /**
      * 根据分类id查询菜品数量
      * @param categoryId
@@ -58,4 +59,13 @@ public interface DishMapper {
     * */
     @AutoFill(value = OperationType.UPDATE)//AOP自动填充字段
     void update(Dish dish);
+
+
+
+    /*
+     * 根据分类id查询菜品
+     * */
+    @Select("select * from sky_take_out.dish where category_id = #{categoryId}")
+    List<Dish> list(Long categoryId);
+
 }
