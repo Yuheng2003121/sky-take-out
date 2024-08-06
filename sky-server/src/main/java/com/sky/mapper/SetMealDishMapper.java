@@ -26,4 +26,9 @@ public interface SetMealDishMapper {
     * 新增菜品和套餐的关系在中间表(根据集合)
     * */
     void insertBatch(List<SetmealDish> setmealDishes);
+
+    /*
+     * 批量删除菜品套餐关系表中的套餐数据(根据套餐id集合)
+     * */
+    void deleteBySetmealIds(List<Long> setMealIds);
 }

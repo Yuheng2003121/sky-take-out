@@ -4,6 +4,7 @@
 <mapper namespace="com.sky.mapper.SetMealDishMapper">
 
 
+
     <!--根据菜品id集合查询对应的所有套餐id-->
     <select id="getSetmealIdsByDishIds" resultType="java.lang.Long">
         select setmeal_id from sky_take_out.setmeal_dish where dish_id in
@@ -20,4 +21,12 @@
             (#{setMealDish.setmealId}, #{setMealDish.dishId}, #{setMealDish.name}, #{setMealDish.price}, #{setMealDish.copies})
         </foreach>
     </insert>
+
+    <!--批量删除菜品套餐关系表中的套餐数据(根据套餐id集合)-->
+    <delete id="deleteBySetmealIds">
+        delete sky_take_out.setmeal_dish where setmeal_id in 
+             <foreach collection="setMealIds" item="setMealId" separator="," open="(" close=")">
+                 #{setMealId}
+             </foreach>
+    </delete>
 </mapper>

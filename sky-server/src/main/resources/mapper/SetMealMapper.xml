@@ -12,6 +12,7 @@
          #{createUser}, #{updateUser})
     </insert>
 
+
     <!--套餐分页查询(动态sql,因为需要判断传来的字段是否为空)-->
     <select id="pageQuery" resultType="com.sky.entity.Setmeal">
         select * from sky_take_out.setmeal
@@ -30,5 +31,15 @@
         </where>
         order by create_time desc
     </select>
+
+    <!--批量删除套餐-->
+    <delete id="deleteBatch">
+        delete sky_take_out.setmeal
+        where status
+        id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>

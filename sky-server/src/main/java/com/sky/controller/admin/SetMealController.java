@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin/setmeal")
 @Api(tags = "套餐相关接口")
@@ -46,4 +48,24 @@ public class SetMealController {
 
         return Result.success(pageResult);
     }
+
+    /*
+    * 批量删除套餐
+    * - 可以一次删除一个套餐，也可以批量删除套餐
+       - 起售中的套餐不能删除
+    * */
+    @DeleteMapping
+    @ApiOperation("批量删除套餐")
+    public Result delete(@RequestParam List<Long> ids){
+        log.info("批量删除套餐:{}",ids);
+
+        setMealService.deleteBatch(ids);
+
+        return Result.success();
+    }
+
+    /*
+    *
+    * */
+
 }
