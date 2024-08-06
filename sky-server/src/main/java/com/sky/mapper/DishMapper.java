@@ -49,7 +49,7 @@ public interface DishMapper {
     void deleteById(Long id);
 
     /*
-     * 删除菜品(根据id集合) 优化一个一个删除
+     * 删除菜品(根据dish id集合) 优化一个一个删除
      * */
     void deleteByIds(List<Long> ids);
 
@@ -61,11 +61,16 @@ public interface DishMapper {
     void update(Dish dish);
 
 
-
     /*
      * 根据分类id查询菜品
      * */
     @Select("select * from sky_take_out.dish where category_id = #{categoryId}")
     List<Dish> list(Long categoryId);
+
+
+    /*
+    * 查询菜品(根据套餐setmeal id)
+    * */
+    List<Dish> getBySetmealId(Long setmealId);
 
 }

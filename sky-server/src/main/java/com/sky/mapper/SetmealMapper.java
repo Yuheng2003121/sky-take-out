@@ -42,13 +42,14 @@ public interface SetmealMapper {
 
 
     /*
-     * 批量删除套餐(根据id集合)
+     * 批量删除套餐(根据套餐id集合)
      * */
     void deleteBatch(List<Long> ids);
 
 
-
-
-
-
+    /*
+     *修改套餐(动态sql,因为需要判断传来的字段是否为空)
+     * */
+    @AutoFill(value = OperationType.INSERT) //AOP自动填充字段
+    void update(Setmeal setmeal);
 }

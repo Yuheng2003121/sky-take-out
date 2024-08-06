@@ -2,9 +2,11 @@ package com.sky.controller.admin;
 
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetMealService;
+import com.sky.vo.SetmealVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -64,8 +66,48 @@ public class SetMealController {
         return Result.success();
     }
 
+
     /*
-    *
+    * 根据套餐id查询套餐(和与之关联的菜品) (用于修改套餐的页面回显)
     * */
+    @GetMapping("/{id}")
+    @ApiOperation("根据套餐id查询套餐")
+    public Result<SetmealVO> getById(@PathVariable Long id){
+        log.info("根据套餐id查询套餐 id:{}", id);
+
+        SetmealVO setmealVO = setMealService.getByIdWithDish(id);
+
+        return Result.success(setmealVO);
+    }
+
+    /*
+    * 修改套餐
+    * */
+    @PutMapping
+    @ApiOperation("修改套餐")
+    public Result update(@RequestBody SetmealDTO setmealDTO){
+        log.info("修改套餐:{}", setmealDTO);
+
+        setMealService.update(setmealDTO);
+
+        return Result.success();
+
+    }
+
+
+
+    /*
+    *起售停售套餐
+    * */
+    @PostMapping("/status/{status}")
+    @ApiOperation("起售停售套餐")
+    public Result startOrStop(@PathVariable Integer status, Long id){
+        log.info("起售停售套餐 id:{}, {}",id, status );
+
+        setMealService.startOrStop(status, id);
+
+        return Result.success();
+    }
+
 
 }
