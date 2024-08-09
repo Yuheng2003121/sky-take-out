@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 @Slf4j
-public class JwtTokenAdminInterceptor implements HandlerInterceptor {
+public class JwtTokenUserinterceptor implements HandlerInterceptor {
 
     @Autowired
     private JwtProperties jwtProperties;
@@ -40,24 +41,24 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         }
 
         //1、从请求头中获取令牌
-        String token = request.getHeader(jwtProperties.getAdminTokenName());
+        String token = request.getHeader(jwtProperties.getUserTokenName());
 
         //2、校验令牌
         try {
-            log.info("jwt校验:{}", token);
-            Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
-            Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
+            log.info("微信jwt校验:{}", token);
+            Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
 
             //把JWT解析的账号id存入到该线程存储里,这样在service,mapper 或该同一线程的其他任务中也能获取到
-            BaseContext.setCurrentId(empId);
-            log.info("JWT解析 当前员工id：", empId);
+            BaseContext.setCurrentId(userId);
+            log.info("JWT解析 当前微信用户id：", userId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {
             //4、不通过，响应401状态码
             response.setStatus(401);
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write("jwt令牌校验失败");
+            response.getWriter().write("微信jwt令牌校验失败");
             return false;
         }
     }

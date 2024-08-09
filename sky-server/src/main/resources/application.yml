@@ -47,12 +47,20 @@ logging:
 
 sky:
   jwt:
-    # 设置jwt签名加密时使用的秘钥
+    # 设置jwt签名加密时使用的秘钥(管理端)
     admin-secret-key: itcast
-    # 设置jwt过期时间
+    # 设置jwt过期时间(管理端)
     admin-ttl: 7200000
-    # 设置前端传递过来的令牌名称
+    # 设置前端传递过来的令牌名称(管理端)
     admin-token-name: token
+
+    # 设置jwt签名加密时使用的秘钥(用户端)
+    user-secret-key: itcast
+    # 设置jwt过期时间(用户端)
+    user-ttl: 7200000
+    # 设置前端传递过来的令牌名称(用户端)
+    user-token-name: authentication
+
 
   # 阿里云的OSS配置信息 (@Value注解通常用于外部配置的属性注入，具体用法为:@Value("${配置文件中的key)")
   oss:
@@ -60,6 +68,11 @@ sky:
     access-key-id: ${sky.oss.access-key-id}
     access-key-secret: ${sky.oss.access-key-secret}
     bucket-name: ${sky.oss.bucket-name}
+
+  # 设置微信小程序配置
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}
 
 
 
