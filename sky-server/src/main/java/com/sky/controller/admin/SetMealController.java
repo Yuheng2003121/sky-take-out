@@ -11,9 +11,27 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+/**
+ * Spring Cache 常用注解:
+ *
+ * 1. @EnableCaching
+ *    - 说明: 开启缓存注解功能，通常加在启动类上
+ *
+ * 2. @Cacheable
+ *    - 说明: 在方法执行前先查询缓存中是否有数据，如果有数据，则直接返回缓存数据;
+ *            如果没有缓存数据，调用方法并将方法返回值放到缓存中
+ *
+ * 3. @CachePut
+ *    - 说明: 将方法的返回值放到缓存中
+ *
+ * 4. @CacheEvict
+ *    - 说明: 将一条或多条数据从缓存中删除
+ */
 
 @RestController
 @RequestMapping("/admin/setmeal")
@@ -30,6 +48,7 @@ public class SetMealController {
     * */
     @PostMapping
     @ApiOperation("新增套餐")
+    @CacheEvict(cacheNames = "setmealCache", key = "#setmealDTO.categoryId")//删除缓存,如果方法接收的setmealDTO的categoryId为100, 那么在redis删除的key: setMealCache::100
     public Result save(@RequestBody SetmealDTO setmealDTO){
         log.info("新增套餐:{}",setmealDTO);
 
@@ -58,6 +77,7 @@ public class SetMealController {
     * */
     @DeleteMapping
     @ApiOperation("批量删除套餐")
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true) //删除所有setmealCache下的缓存数据
     public Result delete(@RequestParam List<Long> ids){
         log.info("批量删除套餐:{}",ids);
 
@@ -85,6 +105,7 @@ public class SetMealController {
     * */
     @PutMapping
     @ApiOperation("修改套餐")
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true) //删除所有setmealCache下的缓存数据
     public Result update(@RequestBody SetmealDTO setmealDTO){
         log.info("修改套餐:{}", setmealDTO);
 
@@ -101,6 +122,7 @@ public class SetMealController {
     * */
     @PostMapping("/status/{status}")
     @ApiOperation("起售停售套餐")
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true) //删除所有setmealCache下的缓存数据
     public Result startOrStop(@PathVariable Integer status, Long id){
         log.info("起售停售套餐 id:{}, {}",id, status );
 
