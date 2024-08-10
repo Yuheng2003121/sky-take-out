@@ -102,4 +102,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         return list;
     }
+
+
+    /*
+     * 清空用户购物车
+     * */
+    @Override
+    public void cleanShoppingCart() {
+        Long userId = BaseContext.getCurrentId();//拦截器会在用户登录成功后把用户id放到线程, 使用该方法获取
+
+        shoppingCartMapper.deleteByUserId(userId);
+    }
 }

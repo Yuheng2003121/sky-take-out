@@ -47,4 +47,17 @@ public class ShoppingCartController {
         return Result.success(list);
     }
 
+    /*
+    * 清空用户购物车
+    * */
+    @DeleteMapping("/clean")
+    @ApiOperation("清空该用户的所有购物车")
+    public Result delete(){
+        log.info("清空当前微信用户所有购物车");
+
+       shoppingCartService.cleanShoppingCart();
+
+        return Result.success();
+    }
+
 }
