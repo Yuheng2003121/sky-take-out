@@ -32,8 +32,16 @@ public interface ShoppingCartMapper {
     void insert(ShoppingCart shoppingCart);
 
     /*
-     * 清空用户购物车(根据当前登录的微信用户id)
+     * 清空用户所有购物车(根据当前登录的微信用户id)
      * */
     @Delete("delete from shopping_cart where user_id = #{userId}")
     void deleteByUserId(Long userId);
+
+
+
+    /*
+    * 删除用户的一个购物车(根据购物车id)
+    * */
+    @Delete("delete from shopping_cart where id = #{id}")
+    void deleteById(Long id);
 }

@@ -43,13 +43,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);//获取购物车
 
-
         //如果商品在购物车已经存在, 只需将该购物车商品数量+1
         if(list != null && list.size() > 0){
             ShoppingCart existedCart = list.get(0);//因为list只可能有1条或0条数据, 可以这样直接获取那个购物车实体
             existedCart.setNumber(existedCart.getNumber() + 1);//给该购物车上的商品 数量 + 1;
             shoppingCartMapper.updateNumberById(existedCart);
-
 
 
         }else {//如果商品在购物车不存在, 则需要插入该商品(新增购物车)
@@ -112,5 +110,35 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         Long userId = BaseContext.getCurrentId();//拦截器会在用户登录成功后把用户id放到线程, 使用该方法获取
 
         shoppingCartMapper.deleteByUserId(userId);
+    }
+
+
+    /*
+     * 删除购物车中一个商品
+     * */
+    @Override
+    public void sub(ShoppingCartDTO shoppingCartDTO) {
+
+        Long userId = BaseContext.getCurrentId();//拦截器会在用户登录成功后把用户id放到线程, 使用该方法获取
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        shoppingCart.setUserId(userId);
+
+        List<ShoppingCart> shoppingCartList = shoppingCartMapper.list(shoppingCart);//条件查询购物车
+
+        ShoppingCart cart = shoppingCartList.get(0);//获得购物车实体, 因为list只可能有1条或0条数据
+
+
+        //查询该购物车的商品的数量是否大于1
+        if(cart.getNumber() > 1){ //该购物车的商品的数量大于1 -> 更新该商品的数量-1
+            cart.setNumber(cart.getNumber() - 1);
+            shoppingCartMapper.updateNumberById(cart);
+
+        }else if(cart.getNumber() == 1){//该购物车的商品的数量=1 -> 删除该购物车数据
+            shoppingCartMapper.deleteById(cart.getId());
+        }
+
+
+
     }
 }
