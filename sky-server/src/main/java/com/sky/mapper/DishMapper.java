@@ -64,7 +64,7 @@ public interface DishMapper {
     /*
      * 根据分类id查询菜品
      * */
-    @Select("select * from sky_take_out.dish where category_id = #{categoryId}")
+    @Select("select * from sky_take_out.dish where category_id = #{categoryId} and status = 1")
     List<Dish> list(Long categoryId);
 
 

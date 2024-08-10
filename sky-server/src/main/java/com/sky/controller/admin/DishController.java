@@ -11,9 +11,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /*
 * 菜品管理
@@ -27,6 +29,9 @@ public class DishController {
     @Autowired
     DishService dishService;
 
+    @Autowired
+    RedisTemplate redisTemplate;//注入redis数据库bean对象
+
     /*
     * 新增菜品和对应的口味
     * */
@@ -36,6 +41,10 @@ public class DishController {
         log.info("新增菜品:{}",dishDTO);
 
         dishService.saveWIthFlavor(dishDTO);
+
+        //mysal数据库新增完后清除redis数据库缓存数据,所以下次用户访问根据cateID查询菜品时可以添加最新数据到redis数据库
+        String key = "dish_" + dishDTO.getCategoryId();
+        cleanCache(key);
 
         return Result.success();
     }
@@ -68,6 +77,9 @@ public class DishController {
 
         dishService.deleteBatch(ids);
 
+        //mysql数据库菜品删除后, 删除redis数据库全部数据
+        cleanCache("dish_*");//删除redis数据库里所有key以dish_*开头的数据
+
         return Result.success();
     }
 
@@ -94,6 +106,26 @@ public class DishController {
 
         dishService.updateWithFlavor(dishDTO);
 
+        //mysql数据库菜品修改后, 删除redis数据库全部数据
+        cleanCache("dish_*");//删除redis数据库里所有key以dish_*开头的数据
+
+
+        return Result.success();
+    }
+
+    /*
+    * 起售停售菜品
+    * */
+    @PostMapping("/status/{status}")
+    @ApiOperation("菜品起售停售")
+    public Result<String> startOrStop(@PathVariable Integer status, Long id) {
+        // 调用服务层方法处理业务逻辑
+        dishService.startOrStop(status, id);
+
+        // 菜品起售停售后,清理所有以 "dish_" 开头的缓存数据
+        cleanCache("dish_*");//删除redis数据库里所有key以dish_*开头的数据
+
+        // 返回操作结果
         return Result.success();
     }
 
@@ -111,6 +143,13 @@ public class DishController {
     }
 
 
+    /*
+    * 清理缓存数据()
+    * */
+    private void cleanCache(String pattern){
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
+    }
 
 
 
