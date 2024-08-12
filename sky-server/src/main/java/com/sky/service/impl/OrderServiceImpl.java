@@ -419,6 +419,25 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /**
+     * 完成订单
+     *
+     * @return
+     */
+    @Override
+    public void complete(Long id) {
+        /*- 完成订单其实就是将订单状态修改为“已完成”
+        - 只有状态为“派送中”的订单可以执行订单完成操作*/
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        if(ordersDB.getStatus() == Orders.DELIVERY_IN_PROGRESS){
+            ordersDB.setStatus(Orders.COMPLETED);//更新订单状态
+            orderMapper.update(ordersDB);
+        }
+
+    }
+
 
     /**
      * 根据订单id获取菜品信息字符串
@@ -438,6 +457,8 @@ public class OrderServiceImpl implements OrderService {
         // 将该订单对应的所有菜品信息拼接在一起
         return String.join("", orderDishList);
     }
+
+
 
 
 }

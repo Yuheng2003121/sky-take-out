@@ -78,4 +78,12 @@ public interface OrderService {
      * @return
      */
     void cancel(OrdersCancelDTO ordersCancelDTO);
+
+
+    /**
+     * 完成订单
+     *
+     * @return
+     */
+    void complete(Long id);
 }
