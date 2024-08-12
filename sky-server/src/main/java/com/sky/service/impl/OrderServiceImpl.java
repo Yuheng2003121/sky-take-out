@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
@@ -345,21 +346,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    /*private List<OrderVO> getOrderVOList(Page<Orders> page) {
-        // 需要返回订单菜品信息，自定义OrderVO响应结果
-        List<OrderVO> orderVOList = new ArrayList<>();
+    /**
+     * 接单(根据订单id)
+     *
+     * @return
+     */
+    @Override
+    public void confirm(OrdersConfirmDTO ordersConfirmDTO) {
+        Orders orders = Orders.builder()
+                .userId(ordersConfirmDTO.getId())
+                .status(ordersConfirmDTO.getStatus())
+                .build();
+
+        orderMapper.update(orders);
+    }
 
 
-        for (Orders orders : page) {
-            OrderVO orderVO = new OrderVO();
 
-            BeanUtils.copyProperties(orders, orderVO);
-            String orderDishes = getOrderDishesStr(orders);//获得该订单id获取菜品信息字符串
-            orderVO.setOrderDishes(orderDishes);
-            orderVOList.add(orderVO);
-        }
-        return orderVOList;
-    }*/
 
     /**
      * 根据订单id获取菜品信息字符串
