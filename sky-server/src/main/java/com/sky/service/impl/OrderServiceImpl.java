@@ -385,12 +385,37 @@ public class OrderServiceImpl implements OrderService {
             log.info("用户申请退款：{}");
         }
 
-        //设置拒单原因
+        // 拒单需要退款，根据订单id更新订单状态、拒单原因、取消时间
         orders.setCancelReason(ordersRejectionDTO.getRejectionReason());
         orders.setStatus(Orders.CANCELLED);
         orders.setCancelTime(LocalDateTime.now());
 
         orderMapper.update(orders);
+
+    }
+
+    /*
+    * 取消订单
+    * */
+    @Override
+    public void cancel(OrdersCancelDTO ordersCancelDTO) {
+        /*- 取消订单其实就是将订单状态修改为“已取消”
+        - 商家取消订单时需要指定取消原因
+        - 商家取消订单时，如果用户已经完成了支付，需要为用户退款*/
+
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getById(ordersCancelDTO.getId());
+
+        if (ordersDB.getPayStatus()== Orders.PAID) {
+            //商家拒单时，如果用户已经完成了支付，需要为用户退款
+            log.info("用户申请退款：{}");
+        }
+
+        // 管理端取消订单需要退款，根据订单id更新订单状态、取消原因、取消时间
+        ordersDB.setStatus(Orders.CANCELLED);
+        ordersDB.setCancelReason(ordersCancelDTO.getCancelReason());
+        ordersDB.setCancelTime(LocalDateTime.now());
+        orderMapper.update(ordersDB);
 
     }
 
