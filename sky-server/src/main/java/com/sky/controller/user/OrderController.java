@@ -10,6 +10,7 @@ import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -65,4 +66,40 @@ public class OrderController {
 
         return Result.success(pageResult);
     }
+
+    /*
+    * 查看订单详情(根据订单id)
+    * */
+    @GetMapping("/orderDetail/{id}")
+    @ApiOperation("查看订单详情(根据订单id)")
+    public Result<OrderVO> details(@PathVariable("id") Long id) {
+        log.info("查看订单详情, id:{}",id);
+        OrderVO orderVO = orderService.details(id);
+        return Result.success(orderVO);
+    }
+
+    /*
+    * 取消订单(根据订单id)
+    * */
+    @PutMapping("/cancel/{id}")
+    @ApiOperation("取消订单(根据订单id)")
+    public Result cancel(@PathVariable("id") Long id){
+        log.info("取消订单, id:{}",id);
+        orderService.userCancelById(id);
+        return Result.success();
+    }
+
+    /*
+    * 再来一单
+    * */
+    @PostMapping("/repetition/{id}")
+    @ApiOperation("再来一单")
+    public Result repetition(@PathVariable("id") Long id){
+        log.info("再来一单, id:{}", id);
+        orderService.repetition(id);
+        return Result.success();
+    }
+
+
+
 }
