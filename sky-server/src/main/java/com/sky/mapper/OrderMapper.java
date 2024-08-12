@@ -42,4 +42,16 @@ public interface OrderMapper {
     * */
     @Select("select * from orders where id = #{id}")
     Orders getById(Long id);
+
+
+    /*
+     * 管理端订单搜索(分页)
+     * */
+    Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /*
+    * 根据状态，分别查询出待接单、待派送、派送中的订单数量
+    * */
+    @Select("select count(*) from orders where status = #{status}")
+    Integer countStatus(Integer status);
 }
