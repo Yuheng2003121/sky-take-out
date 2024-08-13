@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /*操作order表*/
 
@@ -66,5 +67,9 @@ public interface OrderMapper {
     List<Orders> getByStatusAndOrderTime(Integer status, LocalDateTime orderTime);
 
 
+    /*
+    * 根据map键值查询当天营业额
+    * */
+    Double sumByMap(Map map);
 }
 
