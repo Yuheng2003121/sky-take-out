@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * 实现步骤:
- * 1. 直接使用 websocket.html (C:\JAVA Cangqiong\course\资料\day10\WebSocket入门案例) 页面作为 WebSocket 客户端。
+ * 1. 直接使用 websocket.html 页面作为 WebSocket 客户端。
  * 2. 导入 WebSocket 的 Maven 坐标。
  * 3. 导入 WebSocket 服务端组件 WebSocketServer，用于与客户端通信。
  * 4. 导入配置类 WebSocketConfiguration，注册 WebSocket 的服务端组件。

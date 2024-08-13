@@ -164,12 +164,7 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(order);
 
         //支付成功后:通过websocket向管理端浏览器推送消息(来单提醒)
-        Map map = new HashMap<>();
-        map.put("type", 1); // 1 表示来单提醒，2 表示客户催单
-        map.put("orderId", order.getId()); // 订单 ID
-        map.put("content","订单号:" + order.getNumber()); // 消息内容，需根据实际内容填充
-        String message = JSON.toJSONString(map);//map转为json字符串
-        webSocketServer.sendToAllClient(message);
+        orderRemind(order);
 
         return vo;
     }
@@ -451,6 +446,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    /*
+     * 客户催单(使用websocket)
+     * */
+    @Override
+    public void reminder(Long id) {
+        //根据订单id查询订单
+        Orders order = orderMapper.getById(id);
+
+        //校验订单是否存在
+        if (order == null) {//订单不存在 -> 抛出错误
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //订单存在 -> 使用websocket向管理端发送消息
+        Map map = new HashMap<>();
+        map.put("type", 2); // 1 表示来单提醒，2 表示客户催单
+        map.put("orderId", order.getId()); // 订单 ID
+        map.put("content","订单号:" + order.getNumber()); // 消息内容，需根据实际内容填充
+        String message = JSON.toJSONString(map);//map转为json字符串
+        webSocketServer.sendToAllClient(message);
+
+    }
+
+
     /**
      * 根据订单id获取菜品信息字符串
      *
@@ -471,7 +490,34 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    /**
+     * 设计:
+     * 1. 通过 WebSocket 实现管理端页面与服务端保持长连接状态。
+     * 2. 客户支付后，调用 WebSocket 的相关 API 实现服务端向客户端推送消息。
+     * 3. 客户端浏览器解析服务端推送的消息，根据消息类型判断是来单提醒还是客户催单，并进行相应的消息提示和语音播报。
+     *
+     * 服务端发送给客户端浏览器的数据格式约定为 JSON，字段包括:
+     * - type: 消息类型
+     *   - 1: 来单提醒(支付成功后)
+     *   - 2: 客户催单(用户端发送请求,请求服务端接口处理)
+     * - orderId: 订单 ID
+     * - content: 消息内容
+     */
+    private void orderRemind(Orders order){
+        Map map = new HashMap<>();
+        map.put("type", 1); // 1 表示来单提醒，2 表示客户催单
+        map.put("orderId", order.getId()); // 订单 ID
+        map.put("content","订单号:" + order.getNumber()); // 消息内容，需根据实际内容填充
+        String message = JSON.toJSONString(map);//map转为json字符串
+        webSocketServer.sendToAllClient(message);
+    }
+
+
 
 
 }
+
+
+
+
 
