@@ -8,6 +8,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /*操作order表*/
 
 @Mapper
@@ -54,4 +57,14 @@ public interface OrderMapper {
     * */
     @Select("select count(*) from orders where status = #{status}")
     Integer countStatus(Integer status);
+
+
+    /*
+    * 查询所有订单(根据状态和下单时间)
+    * */
+    @Select("select * from orders where status = #{status} and order_Time < #{orderTime}")
+    List<Orders> getByStatusAndOrderTime(Integer status, LocalDateTime orderTime);
+
+
 }
+
