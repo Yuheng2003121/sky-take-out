@@ -1,12 +1,8 @@
-package com.sky.tast;
+package com.sky.task;
 
 /*自定义定时任务类*/
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 //@Component //自定义定时任务类也需要实例化,交给ioc容器管理
 @Slf4j
