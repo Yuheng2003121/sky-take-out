@@ -2,8 +2,10 @@ package com.sky.service.impl;
 
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +28,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     OrderMapper orderMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
 
     /*
@@ -76,6 +81,50 @@ public class ReportServiceImpl implements ReportService {
                 .build();
     }
 
+
+    /*
+     * 统计用户(指定时间区间)
+     * */
+    @Override
+    public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
+        //每一天的时间数据:
+        //集合存放时间区间里的每一天的日期(从begin到end)
+        List<LocalDate> dateList = new ArrayList<>();
+
+        dateList.add(begin);
+        while (!begin.equals(end)) {
+            //日期计算,计算指定日期的后一天对应的臼期
+            begin = begin.plusDays(1);
+            dateList.add(begin);
+        }
+        String dateListStr = StringUtils.join(dateList, ",");//把集合拼成字符串逗号分隔
+
+        List<Integer> newUserList = new ArrayList<>(); //每一天的新增用户数量  select count(id) from user where create_time < ? and create_time > ?
+        List<Integer> totalUserList = new ArrayList<>();//每一天的用户总量 select count(id) from user where create_time <
+        for (LocalDate date : dateList) {
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);//获取当前日期的最早时间, ex 2024-8-12 -> 2024-8-12 00:00:00
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);//获取当前日期的最晚时间
+
+            Map map1 = new HashMap<>();
+            map1.put("begin", beginTime);
+            map1.put("end", endTime);
+            Integer newUserCount = userMapper.countByMap(map1);//每一天的新增用户数量
+            newUserList.add(newUserCount);
+
+            Map map2 = new HashMap<>();
+            map2.put("end", endTime);
+            Integer totalUserCount = userMapper.countByMap(map2);//每一天的用户总量
+            totalUserList.add(totalUserCount);
+        }
+
+
+        //封装结果并返回
+        return UserReportVO.builder()
+                .dateList(dateListStr)
+                .newUserList(StringUtils.join(newUserList, ","))
+                .totalUserList(StringUtils.join(totalUserList, ","))
+                .build();
+    }
 
 
 }
