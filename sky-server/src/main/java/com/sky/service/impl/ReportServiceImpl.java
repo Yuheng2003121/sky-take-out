@@ -1,10 +1,12 @@
 package com.sky.service.impl;
 
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import lombok.Data;
@@ -169,6 +171,7 @@ public class ReportServiceImpl implements ReportService {
            orderCompletionRate =  validOrderCount.doubleValue() / totalOrderCount.doubleValue();
         }
 
+        //封装结果并返回
         return OrderReportVO.builder()
                 .dateList(dateListStr)
                 .orderCountList(StringUtils.join(totalOrderlist, ","))
@@ -176,6 +179,33 @@ public class ReportServiceImpl implements ReportService {
                 .totalOrderCount(totalOrderCount)
                 .validOrderCount(validOrderCount)
                 .orderCompletionRate(orderCompletionRate)
+                .build();
+    }
+
+
+    /*
+     * 查询指定时间区间,有效订单的菜品/套餐销量排名top10
+     * */
+    @Override
+    public SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end) {
+
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);//获取当前日期的最早时间, ex 2024-8-12 -> 2024-8-12 00:00:00
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);//获取当前日期的最晚时间
+
+        List<GoodsSalesDTO> salesTop10 = orderMapper.getSalesTop10(beginTime, endTime);
+
+        List<String> goodsNameList = salesTop10.stream().map(goods -> {
+            return goods.getName();
+        }).collect(Collectors.toList());//top10食品名字集合
+
+        List<Integer> goodsSaleList = salesTop10.stream().map(goods -> {
+            return goods.getNumber();
+        }).collect(Collectors.toList());//top10食物销量集合
+
+        //封装结果并返回
+        return SalesTop10ReportVO.builder()
+                .nameList(StringUtils.join(goodsNameList, ","))
+                .numberList(StringUtils.join(goodsSaleList, ","))
                 .build();
     }
 
