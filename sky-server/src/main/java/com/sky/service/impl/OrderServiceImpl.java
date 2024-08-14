@@ -469,6 +469,22 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /*
+     * 派送订单
+     * */
+    @Override
+    public void delivery(Long id) {
+        //校验订单是否存在
+        Orders orders = orderMapper.getById(id);
+        if(orders == null || orders.getStatus() == Orders.DELIVERY_IN_PROGRESS){//订单不存在/订单状态已为配送中 -> 抛出错误
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        orders.setStatus(Orders.DELIVERY_IN_PROGRESS);
+        orderMapper.update(orders);
+
+    }
+
 
     /**
      * 根据订单id获取菜品信息字符串

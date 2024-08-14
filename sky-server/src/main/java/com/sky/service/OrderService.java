@@ -92,4 +92,9 @@ public interface OrderService {
      * 客户催单(使用websocket)
      * */
     void reminder(Long id);
+
+    /*
+     * 派送订单
+     * */
+    void delivery(Long id);
 }

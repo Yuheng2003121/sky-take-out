@@ -71,5 +71,10 @@ public interface OrderMapper {
     * 根据map键值查询当天营业额
     * */
     Double sumByMap(Map map);
+
+    /*
+    * 查询根据map键值查询订单数
+    * */
+    Integer countByMap(Map map);
 }
 

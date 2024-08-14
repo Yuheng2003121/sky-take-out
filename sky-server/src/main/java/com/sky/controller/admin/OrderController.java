@@ -84,9 +84,22 @@ public class OrderController {
     @PutMapping("/rejection")
     @ApiOperation("拒单")
     public Result rejection(@RequestBody OrdersRejectionDTO ordersRejectionDTO) throws Exception {
+        log.info("拒单:{}",ordersRejectionDTO);
         orderService.rejection(ordersRejectionDTO);
         return Result.success();
     }
+
+    /*
+    * 派送订单
+    * */
+    @PutMapping("/delivery/{id}")
+    @ApiOperation("派送订单")
+    public Result delivery(@PathVariable("id") Long id){
+        log.info("派送订单:{}",id);
+        orderService.delivery(id);
+        return Result.success();
+    }
+
 
     /**
      * 取消订单
